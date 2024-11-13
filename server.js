@@ -25,6 +25,8 @@ const server = http.createServer((req, res) => {
 
     req.on("end", () => {
 
+        const id = url.split("/")[2]
+
         if(url == "/tasks" && method == "GET"){
 
             res.writeHead(200, {"Content-type": "application/json"});
@@ -40,6 +42,24 @@ const server = http.createServer((req, res) => {
 
             res.writeHead(201, {"Content-type": "application/json"})
             res.end(JSON.stringify(newTask))
+
+        }else if(url.startsWith("/tasks/") && method == "PUT"){
+
+            const {completed} = JSON.parse(body)
+            const taskUpdate = tasks.find((tasks) => tasks.id == id)
+
+            if(taskUpdate){
+
+                taskUpdate.completed = completed
+
+                res.writeHead(200, {"Content-type": "application/json"});
+                res.end(JSON.stringify(taskUpdate));
+
+            }else{
+
+                res.writeHead(404, {"Content-type": "application/json"});
+                res.end(JSON.stringify({menssage: "Grade not found"}))
+            }
         }
     })
 })
