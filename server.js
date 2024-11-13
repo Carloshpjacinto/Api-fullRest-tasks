@@ -60,6 +60,28 @@ const server = http.createServer((req, res) => {
                 res.writeHead(404, {"Content-type": "application/json"});
                 res.end(JSON.stringify({menssage: "Grade not found"}))
             }
+
+        }else if(url.startsWith("/tasks/") && method == "DELETE"){
+
+            const verificationId = tasks.findIndex((task) => task.id == id)
+
+            if(verificationId){
+
+                tasks.splice(verificationId, 1);
+
+                res.writeHead(204);
+                res.end()
+
+            }else{
+
+                res.writeHead(404, {"Content-type": "application/json"});
+                res.end(JSON.stringify({message: "Grade not found"}));
+            }
+
+        }else{
+
+            res.writeHead(404, {"Content-type": "application/json"})
+            res.end(JSON.stringify({message: "Route not found"}))
         }
     })
 })
